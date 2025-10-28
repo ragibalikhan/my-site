@@ -141,10 +141,10 @@ export function StatsCounterSection() {
   });
 
   const stats = [
-    { value: "150+", label: "Projects to 10 Countries", icon: growth},
+    { value: "120+", label: "Projects to 10 Countries", icon: growth},
     { value: "100%", label: "Client Satisfaction", icon: satisfaction },
     { value: "24/7", label: "Expert Support", icon: twentyseven },
-    { value: "10+", label: "Years Experience", icon: experience }
+    { value: "11+", label: "Years Experience", icon: experience }
   ];
 
   return (
