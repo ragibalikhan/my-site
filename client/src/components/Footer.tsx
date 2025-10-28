@@ -72,7 +72,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-white/70">
-              <li>hello@neuralcoder.ai</li>
+              <li>sales@neuralcoder.ai</li>
               <li>Global Offices:</li>
               <li>• India (Bangalore)</li>
               <li>• India (Gurgaon)</li>
