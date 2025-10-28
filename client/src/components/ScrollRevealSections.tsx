@@ -141,10 +141,10 @@ export function StatsCounterSection() {
   });
 
   const stats = [
-    { value: "120+", label: "Projects to 10 Countries", icon: growth},
-    { value: "100%", label: "Client Satisfaction", icon: satisfaction },
+    { value: 120, suffix: "+", label: "Projects to 10 Countries", icon: growth},
+    { value: 100, suffix: "%", label: "Client Satisfaction", icon: satisfaction },
     { value: "24/7", label: "Expert Support", icon: twentyseven },
-    { value: "11+", label: "Years Experience", icon: experience }
+    { value: 11, suffix: "+", label: "Years Experience", icon: experience }
   ];
 
   return (
@@ -158,69 +158,77 @@ export function StatsCounterSection() {
           viewport={{ once: true }}
         >
           <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4 bg-gradient-to-br from-[#FF671F] via-[#FFFFFF] to-[#046A38] text-transparent bg-clip-text">
-  Rooted in India, Reaching the World
-</h2>
-
-
-
-
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-br from-[#FF671F] via-[#FFFFFF] to-[#046A38] text-transparent bg-clip-text">
+              Rooted in India, Reaching the World
+            </h2>
             <p className="text-lg text-muted-foreground">
               Innovation that transforms ideas into impact
             </p>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => {
-              const springValue = useSpring(0, { 
-                stiffness: 100, 
-                damping: 30,
-                restDelta: 0.001
-              });
-
-              return (
-                <motion.div
-                  key={stat.label}
-                  className="text-center"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { 
-                      delay: index * 0.1,
-                      duration: 0.6,
-                      onComplete: () => {
-                        if (stat.value.includes('+')) {
-                          const numValue = parseInt(stat.value);
-                          springValue.set(numValue);
-                        }
-                      }
-                    }
-                  }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <div className="mb-2 flex justify-center text-#FFFFFF">
-  <img src={stat.icon} alt={stat.label} className="h-20 w-20 object-contain animate-bounce" />
-</div>
-
-                  <div className="text-3xl font-bold text-primary mb-2">
-                    {stat.value.includes('+') ? (
-                      <motion.span>
-                        {Math.round(springValue.get())}{stat.value.slice(-1)}
-                      </motion.span>
-                    ) : (
-                      stat.value
-                    )}
-                  </div>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                </motion.div>
-              );
-            })}
+            {stats.map((stat, index) => (
+              <AnimatedStat 
+                key={stat.label} 
+                stat={stat} 
+                index={index} 
+              />
+            ))}
           </div>
         </motion.div>
       </div>
     </div>
+  );
+}
+
+// Separate component for animated stat
+function AnimatedStat({ stat, index }: { stat: any; index: number }) {
+  const [isInView, setIsInView] = useState(false);
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    if (isInView && typeof stat.value === 'number') {
+      const controls = animate(count, stat.value, {
+        duration: 2,
+        ease: "easeOut"
+      });
+      return controls.stop;
+    }
+  }, [isInView, stat.value, count]);
+
+  return (
+    <motion.div
+      className="text-center"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ 
+        opacity: 1, 
+        y: 0
+      }}
+      onViewportEnter={() => setIsInView(true)}
+      transition={{ 
+        delay: index * 0.1,
+        duration: 0.6
+      }}
+      viewport={{ once: true }}
+      whileHover={{ scale: 1.05 }}
+    >
+      <div className="mb-2 flex justify-center">
+        <img src={stat.icon} alt={stat.label} className="h-20 w-20 object-contain animate-bounce" />
+      </div>
+
+      <div className="text-3xl font-bold text-primary mb-2">
+        {typeof stat.value === 'number' ? (
+          <>
+            <motion.span>{rounded}</motion.span>
+            {stat.suffix}
+          </>
+        ) : (
+          stat.value
+        )}
+      </div>
+      <p className="text-sm text-muted-foreground">{stat.label}</p>
+    </motion.div>
   );
 }
 "use client";
