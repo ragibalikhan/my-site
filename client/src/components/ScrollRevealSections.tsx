@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, animate } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import { FaCheck, FaArrowRight, FaStar, FaLightbulb, FaBullseye, FaUsers } from "react-icons/fa";
 import growth from "../image/profit-growth.png"
 import twentyseven from "../image/24-7.png"
@@ -132,7 +132,58 @@ export function WhyChooseUsSection() {
   );
 }
 
-// Stats Counter Section
+// Animated Stat Component
+function AnimatedStat({ stat, index }: { stat: any; index: number }) {
+  const [isInView, setIsInView] = useState(false);
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    if (isInView && typeof stat.value === 'number') {
+      const controls = animate(count, stat.value, {
+        duration: 2,
+        ease: "easeOut"
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, stat.value, count]);
+
+  return (
+    <motion.div
+      className="text-center"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ 
+        opacity: 1, 
+        y: 0
+      }}
+      onViewportEnter={() => setIsInView(true)}
+      transition={{ 
+        delay: index * 0.1,
+        duration: 0.6
+      }}
+      viewport={{ once: true }}
+      whileHover={{ scale: 1.05 }}
+    >
+      <div className="mb-2 flex justify-center">
+        <img src={stat.icon} alt={stat.label} className="h-20 w-20 object-contain animate-bounce" />
+      </div>
+
+      <div className="text-3xl font-bold text-primary mb-2">
+        {typeof stat.value === 'number' ? (
+          <>
+            <motion.span>{rounded}</motion.span>
+            {stat.suffix}
+          </>
+        ) : (
+          stat.value
+        )}
+      </div>
+      <p className="text-sm text-muted-foreground">{stat.label}</p>
+    </motion.div>
+  );
+}
+
+// Stats Counter Section - FIXED
 export function StatsCounterSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -180,59 +231,6 @@ export function StatsCounterSection() {
     </div>
   );
 }
-
-// Separate component for animated stat
-function AnimatedStat({ stat, index }: { stat: any; index: number }) {
-  const [isInView, setIsInView] = useState(false);
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
-
-  useEffect(() => {
-    if (isInView && typeof stat.value === 'number') {
-      const controls = animate(count, stat.value, {
-        duration: 2,
-        ease: "easeOut"
-      });
-      return controls.stop;
-    }
-  }, [isInView, stat.value, count]);
-
-  return (
-    <motion.div
-      className="text-center"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ 
-        opacity: 1, 
-        y: 0
-      }}
-      onViewportEnter={() => setIsInView(true)}
-      transition={{ 
-        delay: index * 0.1,
-        duration: 0.6
-      }}
-      viewport={{ once: true }}
-      whileHover={{ scale: 1.05 }}
-    >
-      <div className="mb-2 flex justify-center">
-        <img src={stat.icon} alt={stat.label} className="h-20 w-20 object-contain animate-bounce" />
-      </div>
-
-      <div className="text-3xl font-bold text-primary mb-2">
-        {typeof stat.value === 'number' ? (
-          <>
-            <motion.span>{rounded}</motion.span>
-            {stat.suffix}
-          </>
-        ) : (
-          stat.value
-        )}
-      </div>
-      <p className="text-sm text-muted-foreground">{stat.label}</p>
-    </motion.div>
-  );
-}
-"use client";
-
 
 // Process Timeline Section
 export function ProcessTimelineSection() {
@@ -393,72 +391,71 @@ export function SuccessStoriesSection() {
     offset: ["start end", "end start"]
   });
 
-
-const stories = [
-  {
-    title: "AI-Powered Health Assistant",
-    description: "500,000+ users getting personalized health insights daily",
-    tech: "Machine Learning • Mobile App",
-    impact: "500K+ Active Users",
-    icon: SiTensorflow,
-  },
-  {
-    title: "Blockchain Casino Platform",
-    description: "Decentralized gaming with cryptocurrency integration",
-    tech: "Web3 • Blockchain • DeFi",
-    impact: "Secure Gaming",
-    icon: SiEthereum,
-  },
-  {
-    title: "Creative AI Art Generator",
-    description: "AI-powered digital art creation for artists and hobbyists",
-    tech: "Computer Vision • AI Art",
-    impact: "Creative Innovation",
-    icon: SiAdobecreativecloud,
-  },
-  {
-    title: "Smart Retail Analytics",
-    description: "Helping 1,000+ stores boost sales with AI-driven insights",
-    tech: "AI • Cloud • Big Data",
-    impact: "30% Revenue Growth",
-    icon: SiAmazon,
-  },
-  {
-    title: "EdTech Learning Platform",
-    description: "Interactive video courses with adaptive learning paths",
-    tech: "E-Learning • AI • Web Platform",
-    impact: "1M+ Students Trained",
-    icon: SiCoursera,
-  },
-  {
-    title: "FinTech Fraud Detection",
-    description: "AI engine reducing fraud detection time by 80%",
-    tech: "Big Data • AI • FinTech",
-    impact: "80% Faster Detection",
-    icon: SiAntdesign,
-  },
-  {
-    title: "IoT Smart Farming",
-    description: "Precision farming with smart sensors and automation",
-    tech: "IoT • Cloud • Agriculture",
-    impact: "40% Yield Increase",
-    icon: SiRaspberrypi, // used instead of non-existent SiIot
-  },
-  {
-    title: "AR/VR Fitness App",
-    description: "Immersive workouts with VR-powered fitness experiences",
-    tech: "AR/VR • Mobile App",
-    impact: "Engaging 200K+ Users",
-    icon: SiVirtualbox,
-  },
-  {
-    title: "Supply Chain Optimizer",
-    description: "Reducing logistics delays using AI-driven forecasting",
-    tech: "AI • Blockchain • SaaS",
-    impact: "25% Faster Deliveries",
-    icon: SiChainlink,
-  },
-];
+  const stories = [
+    {
+      title: "AI-Powered Health Assistant",
+      description: "500,000+ users getting personalized health insights daily",
+      tech: "Machine Learning • Mobile App",
+      impact: "500K+ Active Users",
+      icon: SiTensorflow,
+    },
+    {
+      title: "Blockchain Casino Platform",
+      description: "Decentralized gaming with cryptocurrency integration",
+      tech: "Web3 • Blockchain • DeFi",
+      impact: "Secure Gaming",
+      icon: SiEthereum,
+    },
+    {
+      title: "Creative AI Art Generator",
+      description: "AI-powered digital art creation for artists and hobbyists",
+      tech: "Computer Vision • AI Art",
+      impact: "Creative Innovation",
+      icon: SiAdobecreativecloud,
+    },
+    {
+      title: "Smart Retail Analytics",
+      description: "Helping 1,000+ stores boost sales with AI-driven insights",
+      tech: "AI • Cloud • Big Data",
+      impact: "30% Revenue Growth",
+      icon: SiAmazon,
+    },
+    {
+      title: "EdTech Learning Platform",
+      description: "Interactive video courses with adaptive learning paths",
+      tech: "E-Learning • AI • Web Platform",
+      impact: "1M+ Students Trained",
+      icon: SiCoursera,
+    },
+    {
+      title: "FinTech Fraud Detection",
+      description: "AI engine reducing fraud detection time by 80%",
+      tech: "Big Data • AI • FinTech",
+      impact: "80% Faster Detection",
+      icon: SiAntdesign,
+    },
+    {
+      title: "IoT Smart Farming",
+      description: "Precision farming with smart sensors and automation",
+      tech: "IoT • Cloud • Agriculture",
+      impact: "40% Yield Increase",
+      icon: SiRaspberrypi,
+    },
+    {
+      title: "AR/VR Fitness App",
+      description: "Immersive workouts with VR-powered fitness experiences",
+      tech: "AR/VR • Mobile App",
+      impact: "Engaging 200K+ Users",
+      icon: SiVirtualbox,
+    },
+    {
+      title: "Supply Chain Optimizer",
+      description: "Reducing logistics delays using AI-driven forecasting",
+      tech: "AI • Blockchain • SaaS",
+      impact: "25% Faster Deliveries",
+      icon: SiChainlink,
+    },
+  ];
 
   const x = useTransform(scrollYProgress, [0, 1], [0, -300]);
 
