@@ -8,7 +8,7 @@ frontend:
       commands:
         - npm run build
   artifacts:
-    baseDirectory: dist/public  # Change this!
+    baseDirectory: dist/public  # ← Add this line (was missing or set to 'dist')
     files:
       - '**/*'
   cache:
