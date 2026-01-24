@@ -192,7 +192,7 @@ export function StatsCounterSection() {
   });
 
   const stats = [
-    { value: 120, suffix: "+", label: "Projects to 10 Countries", icon: growth},
+    { value: 500, suffix: "+", label: "Projects to 10 Countries", icon: growth},
     { value: 100, suffix: "%", label: "Client Satisfaction", icon: satisfaction },
     { value: "24/7", label: "Expert Support", icon: twentyseven },
     { value: 11, suffix: "+", label: "Years Experience", icon: experience }
