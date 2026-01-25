@@ -87,8 +87,8 @@ export default function Testimonials() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             {[
               { metric: "98%", label: "Client Satisfaction" },
-              { metric: "150+", label: "Projects Delivered" },
-              { metric: "25+", label: "Countries Served" },
+              { metric: "500+", label: "Projects Delivered" },
+              { metric: "10+", label: "Countries Served" },
               { metric: "24/7", label: "Support Available" }
             ].map((stat, index) => (
               <motion.div
