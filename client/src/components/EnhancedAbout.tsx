@@ -5,10 +5,10 @@ import { ScrollReveal, ScrollCounter, MagneticElement, TypewriterText } from "./
 import { FaRocket, FaUsers, FaAward, FaGlobe, FaCode, FaBrain, FaHeart, FaStar } from "react-icons/fa";
 
 const stats = [
-  { number: 150, suffix: "+", title: "Projects Delivered", icon: FaRocket },
-  { number: 98, suffix: "%", title: "Client Satisfaction", icon: FaHeart },
+  { number: 500, suffix: "+", title: "Projects Delivered", icon: FaRocket },
+  { number: 300, suffix: "%", title: "Client Satisfaction", icon: FaHeart },
   { number: 25, suffix: "+", title: "Team Members", icon: FaUsers },
-  { number: 12, suffix: "+", title: "Countries Served", icon: FaGlobe }
+  { number: 10, suffix: "+", title: "Countries Served", icon: FaGlobe }
 ];
 
 const values = [
