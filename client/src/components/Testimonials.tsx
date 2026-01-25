@@ -86,7 +86,7 @@ export default function Testimonials() {
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
             {[
-              { metric: "98%", label: "Client Satisfaction" },
+              { metric: "100%", label: "Client Satisfaction" },
               { metric: "500+", label: "Projects Delivered" },
               { metric: "10+", label: "Countries Served" },
               { metric: "24/7", label: "Support Available" }
